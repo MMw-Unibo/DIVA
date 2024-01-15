@@ -1,0 +1,10 @@
+token
+.vscode
+.venv/
+*/__pycache__
+*.log
+reputation_algorithm/new_reputations/*
+reputation_algorithm/results/*
+reputation_algorithm/*.csv
+reputation_algorithm/*.pdf
+reputation_algorithm/*.txt
