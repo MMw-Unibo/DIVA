@@ -127,9 +127,6 @@ def main(args):
         
         reputations = pd.read_csv('{}/{}'.format(folder,filename), sep=';')
         
-        # if not dataset_name in filename:
-        #     print('{} skipping'.format(filename))
-        #     continue
 
         beta_value = filename.split('beta')[1].split('_')[2].replace('.csv','')
         if beta_value == '-1':
@@ -150,7 +147,6 @@ def main(args):
             message_age = row['message_reception_time'] - row['detection_time']
             time_threshold = get_threshold_set_from_type(threshold_type)[row['situation_eventType']][0] * 1000
             if message_age > time_threshold:
-                #print('Skipping... message too old')
                 j += 1
                 continue
             if not (row['situation_eventType'], threshold_type) in discarded.keys():
@@ -190,9 +186,8 @@ def main(args):
             if not row['source'] in malicious_sources or len(malicious_sources) == 0:
                 total_not_to_be_discarded[(row['situation_eventType'], threshold_type)] += 1
                 total_not_to_be_discarded[('total', threshold_type)] += 1   
-            # if j > 100:
-            #     break
-            # j += 1
+
+
         # Recording elements
         for key in discarded.keys():
             value = (discarded[key]/total_processed[key]) * 100

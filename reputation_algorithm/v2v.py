@@ -270,20 +270,6 @@ def main(args):
         i += 1
         # Resetting reputation score (as it change for each received message)
         reputation_score = 0
-        # NOT Needed: Reputation-based selection
-        # Exclude all messages sent from a source with low reputation score (not on the edge node, as the reputation might be increased)
-        # Get reputation from that source
-        # source_reputation = reputations.loc[reputations['vehicle_did']==row['source']]['score'].values
-        
-        # if source_reputation.size == 0:
-        #     # Adding default reputation
-        #     source_reputation[0] = 0.5 
-        #     # Adding istance to reputation df
-        #     reputations.loc[len(reputations.index)] = [row['source'], source_reputation[0]]
-        # # else:
-        #     if source_reputation[0] < 0.35:
-        #         print("Reputation of {} low, skipping...".format(row['source']))
-        #         continue
 
         # Time-based selection
         # Exclude all the DEN messages with a detection time too old in terms of receiving time
@@ -326,7 +312,6 @@ def main(args):
             reputation_score -= 1
             rep_changes[3] += 1
         else:
-            # TODO Could it represent a problem when there is no RSU?
             # Considering that in our case we do not have RSU, it does not influence the reputation score
             # reputation_score += 0.1
             reputation_score += 0
@@ -343,7 +328,6 @@ def main(args):
                     inherent_cam_counter += 1
             coherency_percentage = (inherent_cam_counter/len(cam_from_source.index)) * 100
         else:
-            # TODO There are no CAM received from that node. How Should we behave?
             # For now, we do not give a reputation score
             coherency_percentage = -1
        
@@ -363,7 +347,6 @@ def main(args):
             rep_changes[5] += 1
         
         eventType = row['situation_eventType']
-        # area = area_definition(point=p, radius=5)
         t = row['detection_time']
 
         # Event type collector selection
