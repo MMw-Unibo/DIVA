@@ -63,8 +63,6 @@ def find_similar_event(event_collector, event, thresholds_type='mean'):
     for key in event_collector:
         time_centroid = event_collector[key]["time_centroid"]
         space_centroid = event_collector[key]["space_centroid"]
-        # TODO how to deal with this distance: so far the threshold considered for DEN distance coherency is the same used for 
-        # CAM coherency. We shouldd conduct a separate study that analyzes this.
         if event_collector[key]["eventType"] == eventType \
             and abs(time_centroid - t) <= time_threshold \
                 and check_distance((p.y, p.x), (space_centroid.y, space_centroid.x), r=radius) :
@@ -136,10 +134,10 @@ def check_similar_event_by_source(event, source):
             return True
     return False
 
-def process_event_similarity(event_collector, actual_time, reputations, alfa, beta, dataset_name=None, reputation_dataset=None, thresholds_type='mean', output_folder='new_reputations'):
+def process_event_similarity(event_collector, actual_time, reputations, alfa, beta, msgCohScore, dataset_name=None, reputation_dataset=None, thresholds_type='mean', output_folder='new_reputations'):
     keys_to_delete = []
     for key in event_collector:
-        rep_score = 0.25 if len(event_collector[key]['denms']) > 2 else -0.25 # CHANGE THESE VALUES ACCORDINGLY
+        rep_score = msgCohScore if len(event_collector[key]['denms']) > 2 else -msgCohScore # CHANGE THESE VALUES ACCORDINGLY
         time_threshold = get_threshold_set_from_type(thresholds_type)[event_collector[key]['eventType']][0] * 1000
         # Checking time
         if rep_score < 0 and event_collector[key]['time_centroid'] > (actual_time - time_threshold) and event_collector[key]['time_centroid'] < actual_time:
@@ -168,6 +166,9 @@ def main(args):
     cam_time_window = args.time_window_cam * 1000 # from sec to ms
     denm_time_window = args.time_window_denm * 1000 # from sec to ms
     geojson_file = args.coverage
+
+    rsuScore = args.defaultScore * args.weightRsu
+    msgCohScore = args.defaultScore * args.weightMsg
 
     alfa = args.alfa
     beta = args.beta
@@ -247,7 +248,7 @@ def main(args):
     cam = cam.drop_duplicates()
     # In other scenarios we may also want to aggregate same messages generated from a certain source within a time interval
 
-    # 4. TODO Cam preprocessing
+    # 4. Cam preprocessing
     # deleting from the dataset messages not in the coverage area
 
 
@@ -290,7 +291,7 @@ def main(args):
                 par2 = reputation_dataset
 
             # Computing reputation based on event similarity
-            process_event_similarity(event_collector, actual_time=row['message_reception_time'], reputations=reputations, alfa=alfa, beta=beta, dataset_name=par1, reputation_dataset=par2, thresholds_type=args.thresholds_type, output_folder=output_folder)
+            process_event_similarity(event_collector, actual_time=row['message_reception_time'], reputations=reputations, alfa=alfa, beta=beta, msgCohScore=msgCohScore, dataset_name=par1, reputation_dataset=par2, thresholds_type=args.thresholds_type, output_folder=output_folder)
             # Updating start time
             new_start_time = row['message_reception_time']
 
@@ -302,14 +303,14 @@ def main(args):
         p = Point(row['eventPos_long'], row['eventPos_lat'])
 
         if not check_cov_intersection(geojson, p):
-            reputation_score -= 0.25
+            reputation_score -= msgCohScore
             rep_changes[2] += 1
         else:
-            reputation_score += 0.1
+            reputation_score += msgCohScore/2
         # Comparing DEN message information with information provided by RSU (if any)
         if not compare_with_rsu(row):
             # Decrease the reputation
-            reputation_score -= 1
+            reputation_score -= rsuScore
             rep_changes[3] += 1
         else:
             # Considering that in our case we do not have RSU, it does not influence the reputation score
@@ -335,7 +336,7 @@ def main(args):
         if coherency_percentage == -1:
             reputation_score += 0
         elif coherency_percentage < 10:
-            reputation_score -= 0.25
+            reputation_score -= msgCohScore
             rep_changes[4] += 1
 
         elif coherency_percentage >= 10 and coherency_percentage < 30:
@@ -343,7 +344,7 @@ def main(args):
             # but we don't have enough CAMs to say that
             reputation_score += 0
         else:
-            reputation_score += 0.25
+            reputation_score += msgCohScore
             rep_changes[5] += 1
         
         eventType = row['situation_eventType']
@@ -429,6 +430,15 @@ if __name__ == '__main__':
     
     parser.add_argument('-o', '--out_folder',
                         help='where to store the new reputations', type=str, default='new_reputations')
+    
+    parser.add_argument('-ds', '--defaultScore', metavar='<default score>',
+                        help='default score for reputations calculation', type=float, default=0.25)
+    
+    parser.add_argument('-wr', '--weightRsu', metavar='<weight RSU>',
+                        help='weight of RSU coherency', type=float, default=4)
+    
+    parser.add_argument('-wm', '--weightMsg', metavar='<weight message coherency>',
+                        help='weight of message coherency', type=float, default=1)
 
     args = parser.parse_args()
 

@@ -52,6 +52,12 @@ The available options are listen below:
                         type of threshold to be used (mean, mode, median, 90percentile)
   -o OUT_FOLDER, --out_folder OUT_FOLDER
                         where to store the new reputations
+  -ds <default score>, --defaultScore <default score>
+                        default score for reputations calculation
+  -wr <weight RSU>, --weightRsu <weight RSU>
+                        weight of RSU coherency
+  -wm <weight message coherency>, --weightMsg <weight message coherency>
+                        weight of message coherency
 ```
 
 
