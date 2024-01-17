@@ -13,14 +13,14 @@ vehicle_client.py
 threshold_utils.py
 ```
 
--  ``` v2v.py ``` provides the algorithm that computes the reputations which will be assigned to each vehicle sources belonging to a VANET.
+-  ``` v2v.py ``` provides the algorithm that computes the reputations. These will be assigned to each vehicle sources belonging to a VANET.
 
-- ```vehicle_client.py```  uses the reputations computed by ```v2v.py``` to determine whether a message can be trusted or not.
+- ```vehicle_client.py```  uses the reputations computed by ```v2v.py``` to determine the trustworthiness of a given message.
 
-- ``` threshold_utils.py ``` is an utility file containing default threshold used in ``` v2v.py ```
+- ``` threshold_utils.py ``` is an utility file containing default thresholds used in ``` v2v.py ```
 
 ## How to run
-The initial script that should be run is ```v2v.py```, containing the implementation of the algorithm computing the reputations of each vehicle. he computation of these reputations is achieved through the analysis of a dataset providing V2X communications data adhering to the ETSI standard, which is accessible [here](https://github.com/MMw-Unibo/ETSI-V2V-Dataset). The script utilizes an initial set of reputations, as the one provided [here](./dataset/initial_reputations.csv), and a [coverage area](./dataset/coverage.json) defining the geographical area managed by an edge node.
+The initial script that should be run is ```v2v.py```, containing the implementation of the algorithm computing the reputations of each vehicle. The computation of these reputations is achieved through the analysis of a dataset providing V2X communications data adhering to the ETSI standard, which is accessible [here](https://github.com/MMw-Unibo/ETSI-V2V-Dataset). The script utilizes an initial set of reputations, as the one provided [here](./dataset/initial_reputations.csv), and a [coverage area](./dataset/coverage.json) defining the geographical area managed by an edge node.
 
 The script is highly configurable for precise tuning of various parameters to accommodate diverse edge node locations.
 
