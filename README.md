@@ -1,9 +1,12 @@
-# DIVA
+# DIVA 
 
 This repository provides the code of the outlier detection algorithm outlined in the paper *DIVA: A DID-based Reputation System for Secure Transmission in VANETs using IOTA*.
 
 **Abstract**
 Today's advancement in Vehicular Ad-hoc Networks (VANET) constitutes a cornerstone in ensuring traffic safety in Intelligent Transportation Systems (ITS). In this context, vehicle-to-vehicle (V2V) communications are a pivotal enabler for road safety, traffic optimization, and pedestrian protection. However, V2V communications lack effective and efficient security solutions that can adequately ensure the trustworthiness of the source of the transmitted content. In this work, we originally propose DIVA, i.e., a Decentralized Identifier-based reputation system for secure transmission in VAnets. In particular, we claim the suitability of utilizing IOTA, a Direct Acyclic Graph (DAG)-based ledger, to securely store reputation scores and of leveraging Decentralized Identifiers (DIDs) to identify participating vehicles. DIVA also incorporates and implements a reputation algorithm that computes reputation scores by analyzing both safety and non-safety messages, exchanged among vehicles and Road Side Units (RSUs) in compliance with the related European Telecommunications Standards Institute (ETSI) standards. Thus, DIVA is able to effectively identify malicious contributors and decrease their reputation scores. The reported experimental results clearly show the feasibility and effectiveness of DIVA, by working on an extended and comprehensive dataset of realistic V2V messages; the dataset has been made openly accessible to the research community, also to increase result reproducibility.
+
+## Code DOI
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10522096.svg)](https://doi.org/10.5281/zenodo.10522096)
 
 ## Python Scripts
 The directory [reputation_algorithm](./reputation_algorithm/) contains three python files:
