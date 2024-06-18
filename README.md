@@ -69,5 +69,6 @@ The script ```vehicle_client.py```  processes vehicle messages and assesses the 
 Examples of how to run these scripts are provided in the [examples](./examples) folder.
 
 
-<!-- ## How to Cite
-TBD -->
+# How To Cite
+If you use this software or part of it for your research, cite our work:
+Feraudo, A., Romandini, N., Mazzocca, C., Montanari, R., & Bellavista, P. (2024). DIVA: A DID-based reputation system for secure transmission in VANETs using IOTA. Computer Networks, 110332. doi: https://doi.org/10.1016/j.comnet.2024.110332
